@@ -1,0 +1,28 @@
+services:
+  jupyter:
+    build: .
+    image: metrics-jupyter:latest
+    container_name: metrics-jupyter
+    ports:
+      - "8888:8888"
+    env_file:
+      - .env
+    volumes:
+      - ./notebooks:/home/jovyan/work/notebooks
+      - exports_vol:/home/jovyan/work/exports
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/api"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+volumes:
+  exports_vol:
+    external: true
+    name: airflow_exports_vol
