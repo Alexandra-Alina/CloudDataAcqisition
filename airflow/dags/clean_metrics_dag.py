@@ -197,9 +197,16 @@ def load_clean(**context) -> str:
 
     ops = []
     for row in rows:
-        doc = {**row, "processed_at": now.isoformat()}
+        window_start_dt = datetime.fromisoformat(row["window_start"])
+        window_end_dt = datetime.fromisoformat(row["window_end"])
+        doc = {
+            **row,
+            "window_start": window_start_dt,
+            "window_end": window_end_dt,
+            "processed_at": now,
+        }
         ops.append(UpdateOne(
-            {"host_id": row["host_id"], "window_start": row["window_start"]},
+            {"host_id": row["host_id"], "window_start": window_start_dt},
             {"$set": doc},
             upsert=True,
         ))
@@ -242,7 +249,7 @@ def export_parquet(**context) -> str:
     df["window_start"] = pd.to_datetime(df["window_start"], utc=True)
     df["window_end"] = pd.to_datetime(df["window_end"], utc=True)
 
-    run_ts = context["execution_date"].strftime("%Y-%m-%d_%H%M")
+    run_ts = context["data_interval_start"].strftime("%Y-%m-%d_%H%M")
     filename = f"metrics_{run_ts}.parquet"
     local_path = EXPORTS_DIR / filename
 

@@ -44,7 +44,7 @@ MONGODB_URI=$${MONGODB_URI}
 GCS_BUCKET_NAME=$${GCS_BUCKET}
 AIRFLOW__CORE__EXECUTOR=LocalExecutor
 AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
-AIRFLOW__CORE__FERNET_KEY=$(python3 -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())" 2>/dev/null || echo "")
+AIRFLOW__CORE__FERNET_KEY=$(python3 -c "import base64,os; print(base64.urlsafe_b64encode(os.urandom(32)).decode())")
 AIRFLOW__WEBSERVER__SECRET_KEY=$(cat /proc/sys/kernel/random/uuid)
 AIRFLOW_UID=$(id -u)
 EOF

@@ -60,3 +60,4 @@ Thumbs.db
 plan.md
 error.log
 metrics-client/config.yaml
+terraform/terraform.tfvars.example

@@ -77,13 +77,13 @@ docker exec mongodb mongosh \
   --password "$MONGO_PASS" \
   --authenticationDatabase admin \
   --eval "
-    db = db.getSiblingDB('metrics_db');
+    db = db.getSiblingDB('admin');
     db.createUser({
       user: '${MONGO_USER}',
       pwd: '${MONGO_PASS}',
       roles: [{ role: 'readWrite', db: 'metrics_db' }]
     });
-    print('metrics_db user created');
+    print('metrics_db user created in admin db');
   " 2>/dev/null || echo "User may already exist — skipping."
 
 echo "MongoDB initialization complete."

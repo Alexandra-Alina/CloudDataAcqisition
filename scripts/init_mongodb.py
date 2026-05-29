@@ -47,7 +47,6 @@ def main():
     raw.create_index(
         [("host_id", ASCENDING), ("timestamp", DESCENDING)],
         name="host_timestamp_idx",
-        background=True,
     )
     print("  Created index: host_id + timestamp (compound)")
 
@@ -56,7 +55,6 @@ def main():
         [("timestamp", ASCENDING)],
         name="raw_ttl_idx",
         expireAfterSeconds=30 * 24 * 3600,
-        background=True,
     )
     print("  Created index: timestamp TTL (30 days)")
 
@@ -68,7 +66,6 @@ def main():
     clean.create_index(
         [("host_id", ASCENDING), ("window_start", DESCENDING)],
         name="host_window_idx",
-        background=True,
     )
     print("  Created index: host_id + window_start (compound)")
 
@@ -77,7 +74,6 @@ def main():
         [("host_id", ASCENDING), ("window_start", ASCENDING)],
         name="host_window_unique_idx",
         unique=True,
-        background=True,
     )
     print("  Created index: host_id + window_start (unique, for upserts)")
 
